@@ -1,0 +1,14 @@
+<app-plain-page-head title="{{ 'showroom.head.title' | translate}}" subtitle="{{ 'showroom.head.subtitle' | translate}}"></app-plain-page-head>
+<div class="padder">
+	<div class="container">
+
+		<owl-carousel ref-showroom
+					  [options]="{items: 3, dots: true, nav: true, center: true, slideBy: 3, startPosition: 1}"
+					  [carouselClasses]="['owl-theme', 'row', 'sliding']">
+			<app-showroom-element></app-showroom-element>
+			<app-showroom-element></app-showroom-element>
+			<app-showroom-element></app-showroom-element>
+			<app-showroom-element></app-showroom-element>
+		</owl-carousel>
+	</div>
+</div>

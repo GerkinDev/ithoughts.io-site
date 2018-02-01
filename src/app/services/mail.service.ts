@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import * as Diaspora from 'diaspora/dist/standalone/diaspora.min.js';
 
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class MailService {

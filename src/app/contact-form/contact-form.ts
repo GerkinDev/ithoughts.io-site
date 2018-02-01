@@ -3,7 +3,7 @@ import { Input, Component, AfterContentInit, ElementRef, ViewChild } from '@angu
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 import {GoogleAnalyticsEventsService} from '../google-analytics-events.service';
-import {MailService} from '../mail.service';
+import {MailService} from '../services/mail.service';
 import * as $ from 'jquery';
 
 @Component({

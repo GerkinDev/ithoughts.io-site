@@ -111,5 +111,13 @@
 		"index": {
 			"_": ""
 		}
+	},
+	"showroom": {
+		"builtWith": "",
+		"head": {
+			"subtitle": "",
+			"title": ""
+		},
+		"seeMore": ""
 	}
 }

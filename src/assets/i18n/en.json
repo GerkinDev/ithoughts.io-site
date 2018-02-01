@@ -29,8 +29,8 @@
 		},
 		"submit": "Envoyer",
 		"type": {
-			"pro": "a professional",
-			"part": "a private individual"
+			"part": "a private individual",
+			"pro": "a professional"
 		}
 	},
 	"cta": {
@@ -64,7 +64,7 @@
 					"alt": "SailsJS logo"
 				},
 				"symfony": {
-					"alt": "Symfony3 logo"
+					"alt": "Symfony4 logo"
 				}
 			},
 			"subtitle": "Flexible & on demand",
@@ -111,5 +111,13 @@
 		"index": {
 			"_": "Home"
 		}
+	},
+	"showroom": {
+		"builtWith": "",
+		"head": {
+			"subtitle": "",
+			"title": ""
+		},
+		"seeMore": ""
 	}
 }
