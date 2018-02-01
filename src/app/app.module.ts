@@ -18,6 +18,8 @@ import {GoogleAnalyticsEventsService} from './google-analytics-events.service';
 import {MailService} from './services/mail.service';
 
 import { OwlModule } from 'ngx-owl-carousel';
+import * as PixiModule from 'angular2pixi';
+console.log(PixiModule);
 import { RECAPTCHA_SETTINGS, RECAPTCHA_LANGUAGE, RecaptchaSettings, RecaptchaModule } from 'ng-recaptcha';
 
 import { AppTranslatableComponent } from './app.translatableComponent';
@@ -60,6 +62,7 @@ import { ShowroomElementComponent } from './pages/showroom/showroom-element/show
 		}),
 		routing,
 		OwlModule,
+		//PixiModule,
 		RecaptchaModule.forRoot(), // Keep in mind the "forRoot"-magic nuances!
 	],
 	providers: [
