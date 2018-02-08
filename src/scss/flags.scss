@@ -7,14 +7,12 @@
     width: 32px;
     height: 32px;
     background: url('../assets/images/flags.png') no-repeat;
-    background-position: 32px 0;
-}
+	background-position: 32px 0;
 
-
-.flag.flag-en {
-    background-position: -32px 0;
-}
-
-.flag.flag-fr {
-    background-position: 0 0;
+	&.flag-en {
+		background-position: -32px 0;
+	}
+	&.flag-fr {
+		background-position: 0 0;
+	}
 }

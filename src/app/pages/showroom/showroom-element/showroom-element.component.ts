@@ -1,7 +1,8 @@
 import { Input, Component, OnInit } from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
+import { OwlChild } from 'ngx-owl-carousel/src/owl-child.component';
 
-import * as Diaspora from 'diaspora/dist/standalone/diaspora.min.js';
+const Diaspora = require( 'diaspora/dist/standalone/diaspora.min.js' );
 
 @Component({
 	selector: 'app-showroom-element',
@@ -9,27 +10,31 @@ import * as Diaspora from 'diaspora/dist/standalone/diaspora.min.js';
 	styleUrls: ['./showroom-element.component.scss']
 })
 export class ShowroomElementComponent implements OnInit {
-	@Input() name: string = null;
-	@Input() siteurl: string = null;
-	@Input() image: string = null;
-	@Input() descFr: string = null;
-	@Input() descEn: string = null;
-	@Input() tech: string = null;
+	@Input() name?: string;
+	@Input() siteurl?: string;
+	@Input() image?: string;
+	@Input() descFr?: string;
+	@Input() descEn?: string;
+	@Input() tech?: string;
 
 	constructor(public translate: TranslateService) {}
 
-	getDescription(lang: string = this.translate.currentLang){
-		if(!lang){
+	getDescription(lang: string = this.translate.currentLang) {
+		if (!lang) {
 			return '';
 		}
 		lang = lang.charAt(0).toUpperCase() + lang.substr(1);
-		return this['desc' + lang];
+		const descKey = 'desc' + lang;
+		if (descKey in this) {
+			return (this as any)[descKey] as string;
+		}
+		return '';
 	}
-	
-	getShowroomElements(query: object = {}){
-		
+
+	getShowroomElements(query: object = {}) {
+
 	}
-	
+
 	ngOnInit() {
 	}
 }

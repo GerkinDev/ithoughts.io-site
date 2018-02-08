@@ -16,3 +16,9 @@ declare module '*.json' {
 		[key: string]: any
 	}
 }
+
+declare module 'diaspora';
+
+interface JQuery{
+	isOnScreen(): boolean;
+}

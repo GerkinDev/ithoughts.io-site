@@ -1,20 +1,20 @@
-<form [formGroup]="emailForm" (ngSubmit)="submitContact($event)" class="material" ref-form>
+<form [formGroup]="emailForm" (ngSubmit)="submitContact()" class="material" ref-form>
 	<h3 [hidden]=!title>{{title | translate}}</h3>
 	<section>
 		<div class="group">
-			<input [(ngModel)]="name" ngControl="name" formControlName="name" id="contact-name" type="text" required/>
+			<input ngControl="name" formControlName="name" id="contact-name" type="text" required/>
 			<span class="highlight"></span>
 			<span class="bar"></span>
 			<label for="contact-name">{{"contactForm.labels.name" | translate}}</label>
 		</div>
 		<div class="group">
-			<input [(ngModel)]="email" ngControl="email" formControlName="email" id="contact-email" type="email" required/>
+			<input ngControl="email" formControlName="email" id="contact-email" type="email" required/>
 			<span class="highlight"></span>
 			<span class="bar"></span>
 			<label for="contact-email">{{"contactForm.labels.email" | translate}}</label>
 		</div>
 		<div class="group">
-			<select [(ngModel)]="type" ngControl="type" formControlName="type" id="contact-type" required>
+			<select ngControl="type" formControlName="type" id="contact-type" required>
 				<option value="" selected disabled></option>
 				<option value="pro">{{"contactForm.type.pro" | translate}}</option>
 				<option value="part">{{"contactForm.type.part" | translate}}</option>
@@ -25,7 +25,7 @@
 		</div>
 	</section>
 	<div class="group">
-		<textarea [(ngModel)]="message" ngControl="message" formControlName="message" id="contact-message" required minlength="25">{{defaultText | translate}}</textarea>
+		<textarea ngControl="message" formControlName="message" id="contact-message" required minlength="25">{{defaultText | translate}}</textarea>
 		<span class="highlight"></span>
 		<span class="bar"></span>
 		<label for="contact-message">{{"contactForm.labels.message" | translate}}</label>

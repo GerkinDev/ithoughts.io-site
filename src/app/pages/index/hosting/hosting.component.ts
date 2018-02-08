@@ -1,16 +1,26 @@
-import { Component, ViewChild, ElementRef, AfterContentInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterContentInit, OnInit } from '@angular/core';
 import * as $ from 'jquery';
+import { OwlCarousel } from 'ngx-owl-carousel';
+// import { setTimeout } from 'timers';
 
 @Component({
 	selector: 'app-web-hosting',
 	templateUrl: './hosting.component.html',
 	styleUrls: ['./hosting.component.scss']
 })
-export class HostingComponent implements AfterContentInit {
-	@ViewChild('caroussel', { read: ElementRef }) carousselEl: ElementRef;
+export class HostingComponent implements AfterContentInit, OnInit {
+	@ViewChild('owlElement') owlElement?: OwlCarousel;
 
 	ngAfterContentInit() {
-		const carousselEl = this.carousselEl.nativeElement;
-		$(carousselEl).css({visibility: 'visible'});
+		console.log('ngAfterContentInit');
+		console.log(this.owlElement);
+		if (this.owlElement) {
+			const carouselEl = this.owlElement;
+			(window as any).carousel = carouselEl;
+			setTimeout(() => carouselEl.trigger('refresh.owl.carousel'), 0);
+		}
+	}
+	ngOnInit() {
+		console.log('ngOnInit');
 	}
 }

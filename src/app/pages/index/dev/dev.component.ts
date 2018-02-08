@@ -10,7 +10,7 @@ export class DevComponent {
 	constructor(public googleAnalyticsEventsService: GoogleAnalyticsEventsService) {
 	}
 
-	clickedSeeMore(category) {
+	clickedSeeMore(category: string) {
 		this.googleAnalyticsEventsService.emitEvent('CTA', 'click', `See more about ${category}`, 10);
 	}
 }

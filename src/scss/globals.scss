@@ -149,7 +149,7 @@ $width: 100%;
 
 form.material{
 	$errorColor: #c65353;
-	
+
 	select{
 		-webkit-appearance:none;
 		-moz-appearance:none;
@@ -230,11 +230,13 @@ owl-carousel{
 		margin: 10px;
 		padding: 0 0 5px;
 		display: inline-block;
+		max-width: 512px;
 	}
 	img{
 		max-width: 40vw;
 		width: 100%;
 		max-height: 300px;
+		max-width: 512px;
 		margin: 0 auto -5px;
 	}
 }

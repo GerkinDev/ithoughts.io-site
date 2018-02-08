@@ -14,7 +14,7 @@ import { ShowroomPageComponent } from './pages/showroom/showroom-page.component'
 export const routes: Routes = [
 	{ path: '', component: IndexPageComponent },
 	{ path: 'about', component: AboutPageComponent },
-	{ path: 'showroom', component: ShowroomPageComponent },
+	// { path: 'showroom', component: ShowroomPageComponent },
 	// { path: '', component: IndexPageComponent },
 ];
 

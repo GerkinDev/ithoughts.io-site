@@ -1,11 +1,11 @@
 <div class="item">
 	<img *ngIf="image !== null" class="image" [src]=image/>
 	<h3>{{ name }}</h3>
-	<div class="description" *ngIf="description !== null">
+	<div class="description" *ngIf="getDescription()">
 		{{ getDescription() }}
 	</div>
 	<div class="meta">
 		<p *ngIf="tech !== null">{{ 'showroom.builtWith'  | translate }} {{ tech }}</p>
 	</div>
-	<a *ngIf="siteUrl !== null" href=siteUrl class="button">{{ 'showroom.seeMore'  | translate }}</a>
+	<a *ngIf="siteurl !== null" href=siteurl class="button">{{ 'showroom.seeMore'  | translate }}</a>
 </div>

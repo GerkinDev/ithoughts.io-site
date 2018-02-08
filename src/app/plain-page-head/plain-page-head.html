@@ -1,18 +1,9 @@
 <div class="plain-page-head">
 	<div class="section fullHeight dark fixed">
-		<renderer id="renderer" [width]="w" [height]="h">
-			<home-scene [renderer]="renderer" (stageUpdated)="homeSceneReady($event)">
-				<sprite
-				[x]="w * 0.5"
-				[y]="h * 0.6"
-				imgUrl="./assets/demo/person.png"
-				*ngIf="homeScene"
-				scale="1"
-				[container]="homeScene.layers.hud"
-				></sprite>
-
-			</home-scene>
-		</renderer>
+		<!--<renderer #renderer [width]="w" [height]="h">
+			<app-home-scene [renderer]="renderer" (stageUpdated)="homeSceneReady($event)">
+			</app-home-scene>
+		</renderer>-->
 		<div class="inner">
 			<div class="container">
 				<h1>{{ title }}</h1>

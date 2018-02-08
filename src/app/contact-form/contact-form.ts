@@ -12,15 +12,11 @@ import * as $ from 'jquery';
 	styleUrls: ['./contact-form.scss']
 })
 export class ContactFormComponent implements AfterContentInit {
-	@ViewChild('form', { read: ElementRef }) formEl: ElementRef;
-	@ViewChild('infos', { read: ElementRef }) infosEl: ElementRef;
-	@Input() title: String = undefined;
-	@Input() defaultText: String;
-	public name;
-	public email;
-	public type;
-	public message;
-	private captchaResponse: string;
+	@ViewChild('form', { read: ElementRef }) formEl?: ElementRef;
+	@ViewChild('infos', { read: ElementRef }) infosEl?: ElementRef;
+	@Input() title = '';
+	@Input() defaultText = '';
+	private captchaResponse?: string;
 
 
 	public emailForm = new FormGroup({
@@ -31,9 +27,9 @@ export class ContactFormComponent implements AfterContentInit {
 	});
 
 	constructor(
-	private mailService: MailService,
-	 private googleAnalyticsEventsService: GoogleAnalyticsEventsService,
-	 private translateService: TranslateService
+		private mailService: MailService,
+		private googleAnalyticsEventsService: GoogleAnalyticsEventsService,
+		private translateService: TranslateService
 	) {
 		if (this.defaultText) {
 			this.emailForm.controls.message.setValue(this.defaultText);
@@ -44,27 +40,32 @@ export class ContactFormComponent implements AfterContentInit {
 		this.captchaResponse = captchaResponse;
 	}
 
-	submitContact(event) {
+	setStatus(statusString: string) {
+		if (this.infosEl) {
+			this.infosEl.nativeElement.innerHTML = statusString;
+		} else {
+			console.log(statusString);
+		}
+	}
+
+	async submitContact() {
 		if (!this.captchaResponse) {
-			this.translateService.get('contactForm.result.captcha').subscribe(translated => {
-				this.infosEl.nativeElement.innerHTML = translated;
-			});
+			this.translateService.get('contactForm.result.captcha').subscribe(this.setStatus);
 			return;
 		}
 		this.googleAnalyticsEventsService.emitEvent('testCategory', 'testAction', 'testLabel', 10);
-		this.formEl.nativeElement.style.height = this.formEl.nativeElement.clientHeight + 'px';
-		this.mailService.sendMail(this.emailForm.value, this.captchaResponse).then(() => {
-			this.formEl.nativeElement.style.opacity = 0;
-			this.formEl.nativeElement.style.height = 0;
-			this.translateService.get('contactForm.result.success').subscribe(translated => {
-				this.infosEl.nativeElement.innerHTML = translated;
-			});
-		}).catch(error => {
-			console.error(error);
-			this.translateService.get('contactForm.result.error').subscribe(translated => {
-				this.infosEl.nativeElement.innerHTML = translated;
-			});
-		});
+		if (this.formEl) {
+			this.formEl.nativeElement.style.height = this.formEl.nativeElement.clientHeight + 'px';
+			try {
+				await this.mailService.sendMail(this.emailForm.value, this.captchaResponse);
+				this.formEl.nativeElement.style.opacity = 0;
+				this.formEl.nativeElement.style.height = 0;
+				this.translateService.get('contactForm.result.success').subscribe(this.setStatus);
+			} catch (error) {
+				console.error(error);
+				this.translateService.get('contactForm.result.error').subscribe(this.setStatus);
+			}
+		}
 	}
 
 	ngAfterContentInit() {

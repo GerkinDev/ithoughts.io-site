@@ -32,6 +32,11 @@ import { DevComponent } from './pages/index/dev/dev.component';
 import { environment } from '../environments/environment';
 import { ShowroomPageComponent } from './pages/showroom/showroom-page.component';
 import { ShowroomElementComponent } from './pages/showroom/showroom-element/showroom-element.component';
+//import { HomeSceneComponent } from './home-scene/home-scene.component';
+
+import * as _ from 'lodash';
+
+const recaptchaSettings = { siteKey: _.get(environment, 'app.recaptchaKey') } as RecaptchaSettings;
 
 @NgModule({
 	declarations: [
@@ -47,6 +52,7 @@ import { ShowroomElementComponent } from './pages/showroom/showroom-element/show
 		IndexPageComponent,
 		ShowroomPageComponent,
 		ShowroomElementComponent,
+		//HomeSceneComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -55,13 +61,13 @@ import { ShowroomElementComponent } from './pages/showroom/showroom-element/show
 		TranslateModule.forRoot({
 			loader: {
 				provide: TranslateLoader,
-				useFactory: (createTranslateLoader),
+				useFactory: createTranslateLoader,
 				deps: [HttpClient]
 			}
 		}),
 		routing,
 		OwlModule,
-		//PixiModule,
+		//PixiModule.forRoot(),
 		RecaptchaModule.forRoot(), // Keep in mind the "forRoot"-magic nuances!
 	],
 	providers: [
@@ -69,7 +75,7 @@ import { ShowroomElementComponent } from './pages/showroom/showroom-element/show
 		MailService,
 		{
 			provide: RECAPTCHA_SETTINGS,
-			useValue: { siteKey: (<any>environment).app.recaptchaKey } as RecaptchaSettings,
+			useValue: recaptchaSettings,
 		},
 		/*{
 			provide: RECAPTCHA_LANGUAGE,
@@ -77,12 +83,11 @@ import { ShowroomElementComponent } from './pages/showroom/showroom-element/show
 		},*/
 	],
 	entryComponents: [
-		ShowroomElementComponent,
+	//	ShowroomElementComponent,
 	],
 	bootstrap: [
 		AppComponent,
 	]
 })
-
 export class AppModule {}
 

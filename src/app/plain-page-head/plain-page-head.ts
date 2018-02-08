@@ -6,18 +6,18 @@ import { Input, Component } from '@angular/core';
 	styleUrls: ['./plain-page-head.scss']
 })
 export class PlainPageHeadComponent {
-	@Input() title: string;
-	@Input() subtitle: string;
+	@Input() title?: string;
+	@Input() subtitle?: string;
 	private homeScene: any;
 
 	scrollOutPage() {
-		const dom = document.querySelector('app-plain-page-head + *');
+		const dom = document.querySelector('app-plain-page-head + *') as HTMLElement;
 		const rect = dom.getBoundingClientRect();
 		window.scrollTo({ left: window.pageXOffset, top: rect.top + window.pageYOffset - 50, behavior: 'smooth' });
 	}
 
-	homeSceneReady(scene: any) {
-		console.log(scene);
-		this.homeScene = scene;
+	homeSceneReady(...args: any[]) {
+			console.log('HomeScene ready', args);
+		// this.homeScene = scene;
 	}
 }

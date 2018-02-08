@@ -3,11 +3,16 @@
 :host-context(){
 	text-align: center;
 
-	::ng-deep ~ *{
-		position: relative;
-		z-index: 1;
-		background-color: $white2;
-		display: block;
+	::ng-deep{
+		canvas{
+			position: absolute;
+		}
+		 ~ *{
+			position: relative;
+			z-index: 1;
+			background-color: $white2;
+			display: block;
+		}
 	}
 }
 .plain-page-head{
@@ -21,6 +26,11 @@
 .inner {
 	display: table-cell;
 	vertical-align: middle;
+	position: relative;
+	.container{
+		display: inline-block;
+		background-color: rgba(0, 0, 0, 1);
+	}
 }
 .chevronPos{
 	background-color: rgba(0,0,0,0.5);

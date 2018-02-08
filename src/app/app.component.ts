@@ -11,7 +11,7 @@ import {TranslateService} from '@ngx-translate/core';
 	styleUrls: ['./app.component.scss']
 })
 export class AppComponent extends AppTranslatableComponent {
-	title = 'THE app';
+	title = 'iThoughts';
 	today = new Date();
 
 	constructor(public router: Router, public googleAnalyticsEventsService: GoogleAnalyticsEventsService, translate: TranslateService) {

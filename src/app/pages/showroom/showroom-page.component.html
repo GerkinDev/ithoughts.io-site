@@ -2,13 +2,19 @@
 <div class="padder">
 	<div class="container">
 
-		<owl-carousel ref-showroom
-					  [options]="{items: 3, dots: true, nav: true, center: true, slideBy: 3, startPosition: 1}"
-					  [carouselClasses]="['owl-theme', 'row', 'sliding']">
-			<app-showroom-element></app-showroom-element>
-			<app-showroom-element></app-showroom-element>
-			<app-showroom-element></app-showroom-element>
-			<app-showroom-element></app-showroom-element>
-		</owl-carousel>
-	</div>
+		<owl-carousel #showroom
+		[options]="{items: 3, dots: true, nav: true, center: true, slideBy: 3, startPosition: 1}"
+		[carouselClasses]="['owl-theme', 'row', 'sliding']">
+		<div *ngFor="let item of this.listItems">
+			<app-showroom-element
+			[name]="item.name"
+			[siteurl]="item.siteurl"
+			[image]="item.image"
+			[descFr]="item.descFr"
+			[descEn]="item.descEn"
+			[tech]="item.tech"
+			></app-showroom-element>
+		</div>
+	</owl-carousel>
+</div>
 </div>

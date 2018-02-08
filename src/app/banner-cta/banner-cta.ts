@@ -11,9 +11,9 @@ import {GoogleAnalyticsEventsService} from '../google-analytics-events.service';
 })
 export class BannerCtaComponent {
 	public formHidden = true;
-	@Input() public title: string;
-	@Input() public catchPhrase: string;
-	@Input() public cta: string;
+	@Input() public title = '';
+	@Input() public catchPhrase = '';
+	@Input() public cta = '';
 
 	constructor(public googleAnalyticsEventsService: GoogleAnalyticsEventsService) { }
 

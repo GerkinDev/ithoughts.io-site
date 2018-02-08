@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 
-import * as Diaspora from 'diaspora/dist/standalone/diaspora.min.js';
+const Diaspora = require( 'diaspora/dist/standalone/diaspora.min' );
 
 import { environment } from '../../environments/environment';
 
 @Injectable()
 export class MailService {
-	private ContactMail;
+	private ContactMail: any;
 
 	constructor() {
-		const apiUrl = (<any>environment).api.url;
-		const apiSegments = apiUrl.match(/^(?:(https?):\/\/)?(.+?)(?::(\d+))?$/);
+		const apiUrl = (<any>environment).api.url as string;
+		const apiSegments = apiUrl.match(/^(?:(https?):\/\/)?(.+?)(?::(\d+))?$/) as RegExpMatchArray;
 		Diaspora.createNamedDataSource('main', 'webApi', {
 			scheme: apiSegments[1],
 			host:   apiSegments[2],
@@ -44,7 +44,12 @@ export class MailService {
 		});
 	}
 
-	sendMail(mail, recaptcha) {
+	sendMail(mail: {
+		email: string,
+		name: string,
+		type: string,
+		message: string,
+	}, recaptcha: string) {
 		const remappedMail = {
 			senderMail: mail.email,
 			senderName: mail.name,

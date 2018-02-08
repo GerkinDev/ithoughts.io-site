@@ -1,19 +1,24 @@
-import { Component, ViewChild, ViewContainerRef, AfterContentInit, ComponentFactoryResolver, Injector } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef, OnInit, AfterContentInit, ComponentFactoryResolver, Injector } from '@angular/core';
 import { ShowroomElementComponent } from './showroom-element/showroom-element.component';
 import * as $ from 'jquery';
-import * as Diaspora from 'diaspora/dist/standalone/diaspora.min.js';
+const Diaspora = require( 'diaspora/dist/standalone/diaspora.min' );
 import * as _ from 'lodash';
+import { environment } from '../../../environments/environment';
+import { OwlCarousel } from 'ngx-owl-carousel';
+import { LoDashWrapper, LoDashExplicitArrayWrapper } from 'lodash';
 
 @Component({
 	selector: 'app-showroom-page',
 	templateUrl: './showroom-page.component.html',
 	styleUrls: ['./showroom-page.component.scss']
 })
-export class ShowroomPageComponent implements AfterContentInit {
-	@ViewChild('showroom', { read: ViewContainerRef }) showroom: ViewContainerRef;
-	private Showroom;
+export class ShowroomPageComponent implements OnInit, AfterContentInit {
+	@ViewChild('showroom', { read: OwlCarousel }) showroom?: OwlCarousel;
+	@ViewChild('showroom', { read: ViewContainerRef }) showroomRef?: ViewContainerRef;
+	public listItems: Array<any> = [];
+	private Showroom: any;
 
-	constructor(private resolver: ComponentFactoryResolver) {
+	constructor(private componentFactoryResolver: ComponentFactoryResolver) {
 		Diaspora.createNamedDataSource('local', 'inMemory');
 		this.Showroom = Diaspora.declareModel('Showroom', {
 			sources: 'local',
@@ -41,24 +46,31 @@ export class ShowroomPageComponent implements AfterContentInit {
 	}
 
 	async ngOnInit() {
-		const col = this.Showroom.spawnMany([
-			{ name: 'iThoughts', tech: 'Angular2', siteUrl: 'https://ithoughts.io', descFr: 'Site corporate responsive avec Angular2 & Diaspora.' },
-			{ name: 'Self 3D Print', tech: 'Symfony4', siteUrl: 'https://self3dprint.ithoughts.io', descFr: 'Vente en ligne d\'objets imprimés en 3D, où les utilisateurs peuvent imprimer leurs propres modèles. En développement.' },
-			{ name: 'GerkinDevelopment', tech: 'Wordpress', siteUrl: 'https://www.gerkindevelopment.net', descFr: 'Blog d\'Alexandre Germain, basé sur un WordPress lourdement personnalisé.' },
-			{ name: 'Art Aux Murs', tech: 'Prestashop', siteUrl: 'https://www.art-aux-murs.fr/', descFr: 'Vente en ligne de tableaux de fractales ou abstraits.' }
-		]);
-		const showroomElements = await col.persist();
+		const col = this.Showroom.spawnMany(environment.showroom);
+		const showroomElements: LoDashExplicitArrayWrapper<{attributes: any}> = await col.persist();
+		this.listItems = showroomElements.map('attributes').value();
 
-		const factory = this.resolver.resolveComponentFactory(ShowroomElementComponent);
-		showroomElements.forEach(item => {
-			const attrs = item.attributes;
-			const inputs  = <any>_(attrs).toPairs().map((input) => ({provide: input[0], useValue: input[1]})).value();
-			console.log(inputs);
-			const injector = Injector.create(inputs);
+		if (this.showroom) {
+			setTimeout(() => this.showroom ? this.showroom.trigger('refresh.owl.carousel') : null, 1000);
+			console.log({
+				showroom: this.showroom,
+				showroomRef: this.showroomRef
+			});
+			(window as any).showroom = this.showroom;
+			/*const componentFactory = this.componentFactoryResolver
+			.resolveComponentFactory(ShowroomElementComponent);
 
-			const component = factory.create(this.showroom.parentInjector, inputs);
-			this.showroom.insert(component.hostView);
-		});
+			const items = showroomElements.map((item: any) => {
+				const componentRef = (this.showroomRef as ViewContainerRef).createComponent(componentFactory);
+				const component = componentRef.instance;
+				console.log({component, componentRef}, componentRef.hostView);
+				_.assign(component, item.attributes);
+				(this.showroom as OwlCarousel).trigger('add.owl.carousel', [componentRef.hostView, 0]);
+				return component;
+			}).value();*/
+//			console.log(items);
+//			this.showroom.trigger('add.owl.carousel', items);
+		}
 
 		// We create an injector out of the data we want to pass down and this components injector
 	}
@@ -68,7 +80,7 @@ export class ShowroomPageComponent implements AfterContentInit {
 		/*let inputProviders = Object.keys(data.inputs).map((inputName) => {return {provide: inputName, useValue: data.inputs[inputName]};});
 		let resolvedInputs = ReflectiveInjector.resolve(inputProviders);*/
 
-/*		const inputs = [];
+		/*		const inputs = [];
 
 		// We create an injector out of the data we want to pass down and this components injector
 		const injector = Injector.create(inputs);

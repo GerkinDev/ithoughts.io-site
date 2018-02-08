@@ -5,7 +5,7 @@
 	flex-direction: row;
 
 	& > section{
-		flex: 1 0 50%;
+		flex: 1 1 50%;
 	}
 	& > aside{
 		flex: 0 1 600px;
@@ -14,6 +14,17 @@
 		h4{
 			margin: 15px 0 5px;
 			text-align: center;
+		}
+	}
+
+	@media (max-width: 980px) {
+		align-items: center;
+		flex-direction: column-reverse;
+
+		& > aside{
+			flex: 1 1 auto;
+			max-width: 100%;
+			align-self: stretch;
 		}
 	}
 }

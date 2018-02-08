@@ -7,9 +7,15 @@
 			<div id="paneSplit">
 				<section [innerHTML]="'hosting.features' | translate"></section>
 				<aside>
-					<owl-carousel ref-caroussel
-								  [options]="{items: 1, dots: true, nav: true, center: true}"
-								  [carouselClasses]="['owl-theme', 'row', 'sliding']">
+					<owl-carousel #owlElement
+						[options]="{
+							items: 1,
+							dots: true,
+							nav: true,
+							loop: false,
+							center: true
+						}"
+						[carouselClasses]="['owl-theme']">
 						<div class="item">
 							<img src="/assets/images/services/ovh.jpg" [alt]=" 'hosting.feat.ovh.alt' | translate">
 							<div class="content"><h4>{{ 'hosting.feat.ovh.title' | translate }}</h4></div>
