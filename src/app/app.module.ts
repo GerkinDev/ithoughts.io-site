@@ -1,3 +1,8 @@
+// Import polyfills.
+import 'babel-polyfill';
+import 'zone.js/dist/zone.js';
+
+
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -32,7 +37,7 @@ import { DevComponent } from './pages/index/dev/dev.component';
 import { environment } from '../environments/environment';
 import { ShowroomPageComponent } from './pages/showroom/showroom-page.component';
 import { ShowroomElementComponent } from './pages/showroom/showroom-element/showroom-element.component';
-//import { HomeSceneComponent } from './home-scene/home-scene.component';
+import { HomeSceneComponent } from './home-scene/home-scene.component';
 
 import * as _ from 'lodash';
 
@@ -52,7 +57,7 @@ const recaptchaSettings = { siteKey: _.get(environment, 'app.recaptchaKey') } as
 		IndexPageComponent,
 		ShowroomPageComponent,
 		ShowroomElementComponent,
-		//HomeSceneComponent,
+		HomeSceneComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -67,7 +72,7 @@ const recaptchaSettings = { siteKey: _.get(environment, 'app.recaptchaKey') } as
 		}),
 		routing,
 		OwlModule,
-		//PixiModule.forRoot(),
+		PixiModule,
 		RecaptchaModule.forRoot(), // Keep in mind the "forRoot"-magic nuances!
 	],
 	providers: [

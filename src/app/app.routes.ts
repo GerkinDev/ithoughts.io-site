@@ -5,6 +5,7 @@
 // import { provideRouter, RouterConfig } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 import { IndexPageComponent } from './pages/index/index-page.component';
 import { AboutPageComponent } from './pages/about/about-page.component';
 import { ShowroomPageComponent } from './pages/showroom/showroom-page.component';
@@ -14,7 +15,7 @@ import { ShowroomPageComponent } from './pages/showroom/showroom-page.component'
 export const routes: Routes = [
 	{ path: '', component: IndexPageComponent },
 	{ path: 'about', component: AboutPageComponent },
-	// { path: 'showroom', component: ShowroomPageComponent },
+	{ path: 'showroom', component: ShowroomPageComponent },
 	// { path: '', component: IndexPageComponent },
 ];
 

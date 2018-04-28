@@ -14,7 +14,7 @@ export class MailService {
 		Diaspora.createNamedDataSource('main', 'webApi', {
 			scheme: apiSegments[1],
 			host:   apiSegments[2],
-			port:   apiSegments[3],
+			port:   apiSegments[3] || (<any>environment).api.port,
 		});
 		this.ContactMail = Diaspora.declareModel('ContactMail', {
 			sources: 'main',
@@ -44,7 +44,7 @@ export class MailService {
 		});
 	}
 
-	sendMail(mail: {
+	async sendMail(mail: {
 		email: string,
 		name: string,
 		type: string,
@@ -56,7 +56,9 @@ export class MailService {
 			senderCategory: mail.type,
 			message: mail.message,
 			recaptcha: recaptcha,
-		};
-		return this.ContactMail.spawn(remappedMail).persist();
+        };
+        const newEntity = this.ContactMail.spawn(remappedMail);
+        console.log({newEntity});
+		return await newEntity.persist();
 	}
 }

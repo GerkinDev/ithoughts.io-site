@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterContentInit, OnInit } from '@angular/core';
+import { Component, ViewChild, AfterContentInit, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import { OwlCarousel } from 'ngx-owl-carousel';
 // import { setTimeout } from 'timers';

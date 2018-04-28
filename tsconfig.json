@@ -2,25 +2,27 @@
 	"compilerOptions": {
 		"outDir": "./dist/out-tsc",
 		"sourceMap": true,
-		"declaration": false,
+		"declaration": true,
 		"moduleResolution": "node",
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"noImplicitAny": true,
 		"strict": true,
+        "skipLibCheck": true,
 		"target": "es6",
 		"typeRoots": [
 			"node_modules/@types"
 		],
 		"types": [ "node" ],
 		"lib": [
-			"es2017",
+            "es2015",
 			"dom"
 		],
-		"watch": true
+        "watch": true,
+        "downlevelIteration": true
 	},
 	"compileOnSave": false,
 	"angularCompilerOptions": {
 		"strictMetadataEmit" : true
-	  }
+    }
 }
