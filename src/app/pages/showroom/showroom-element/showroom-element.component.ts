@@ -1,6 +1,7 @@
 import { Input, Component, OnInit } from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import { OwlChild } from 'ngx-owl-carousel/src/owl-child.component';
+import { ShowroomPageComponent } from '../showroom-page.component';
 
 const Diaspora = require( 'diaspora/dist/standalone/diaspora.min.js' );
 
@@ -15,10 +16,11 @@ export class ShowroomElementComponent implements OnInit {
 	@Input() image?: string;
 	@Input() descFr?: string;
 	@Input() descEn?: string;
-	@Input() tech?: string;
-
+	@Input() tags?: string[];
+	@Input() showroomPage?: ShowroomPageComponent;
+	
 	constructor(public translate: TranslateService) {}
-
+	
 	getDescription(lang: string = this.translate.currentLang) {
 		if (!lang) {
 			return '';
@@ -30,9 +32,8 @@ export class ShowroomElementComponent implements OnInit {
 		}
 		return '';
 	}
-
+	
 	getShowroomElements(query: object = {}) {
-
 	}
 
 	ngOnInit() {

@@ -1,11 +1,17 @@
-<div class="item">
-	<img *ngIf="image !== null" class="image" [src]=image/>
-	<h3>{{ name }}</h3>
-	<div class="description" *ngIf="getDescription()">
-		{{ getDescription() }}
-	</div>
-	<div class="meta">
-		<p *ngIf="tech !== null">{{ 'showroom.builtWith'  | translate }} {{ tech }}</p>
-	</div>
-	<a *ngIf="siteurl !== null" href=siteurl class="button">{{ 'showroom.seeMore'  | translate }}</a>
-</div>
+<section class="item">
+    <article class="item-body">
+        <img *ngIf="image" class="image" [src]="image"/>
+        <h3>{{ name }}</h3>
+        <div class="description" *ngIf="getDescription()">
+            {{ getDescription() }}
+        </div>
+        <div class="meta">
+            <p *ngIf="tags">{{ 'showroom.builtWith'  | translate }}
+                <a *ngFor="let tag of this.tags" (click)="showroomPage.addSearchTag(tag)" class="tag clickable">{{ tag }}</a>
+            </p>
+        </div>
+    </article>
+    <footer>
+        <a *ngIf="siteurl" [href]="siteurl" class="button">{{ 'showroom.seeMore'  | translate }}</a>
+    </footer>
+</section>

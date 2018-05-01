@@ -2,21 +2,23 @@ import { Injectable } from '@angular/core';
 
 const Diaspora = require( 'diaspora/dist/standalone/diaspora.min' );
 
-import { environment } from '../../environments/environment';
+import { environment} from '../../environments/environment';
+import { IIthoughtsEnvironment } from '../../environments/environment.common';
 
 @Injectable()
 export class MailService {
 	private ContactMail: any;
 
 	constructor() {
-		const apiUrl = (<any>environment).api.url as string;
+        console.log({environment})
+		const apiUrl = (environment as IIthoughtsEnvironment).api.url as string;
 		const apiSegments = apiUrl.match(/^(?:(https?):\/\/)?(.+?)(?::(\d+))?$/) as RegExpMatchArray;
 		Diaspora.createNamedDataSource('main', 'webApi', {
 			scheme: apiSegments[1],
 			host:   apiSegments[2],
-			port:   apiSegments[3] || (<any>environment).api.port,
+			port:   apiSegments[3] || (environment as IIthoughtsEnvironment).api.port,
 		});
-		this.ContactMail = Diaspora.declareModel('ContactMail', {
+		this.ContactMail = Diaspora.declareModel('ContactMailIthoughts', {
 			sources: 'main',
 			attributes: {
 				recaptcha: {

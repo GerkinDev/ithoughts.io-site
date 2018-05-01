@@ -33,11 +33,17 @@ footer.dark {
 	display: flex;
 	flex-direction: row;
 	align-items: stretch;
-	justify-content: space-between;
+    justify-content: space-between;
+    
+    transition: 0.3s background-color;
 
 	> *{
 		flex: 0 0 auto;
-	}
+    }
+    
+    a{
+        transition: 0.3s color;
+    }
 
 	ul {
 		list-style: none;
@@ -85,15 +91,27 @@ footer.dark {
 				pointer-events: all
 			}
 		}
-	}
+    }
+    
+
+    &.attop {
+        background-color: transparent!important;
+        a, a:visited{
+            color: $green;
+        }
+        #siteTitle{
+            color: $white2!important;
+        }
+    }
 }
+
 #siteTitle{
 	font-family: 'Open Sans',sans-serif;
 	margin: 15px;
 	font-size: 20px;
 	font-weight: 700;
 	text-decoration: none;
-	color: $dark;
+    color: $dark;
 }
 #langSwitcher{
 	display: flex;

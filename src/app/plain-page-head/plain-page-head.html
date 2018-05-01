@@ -1,9 +1,9 @@
 <div class="plain-page-head">
-	<div class="section fullHeight dark fixed">
-		<canvas #renderer>
-			<app-home-scene [renderer]="renderer" (stageUpdated)="homeSceneReady($event)">
-			</app-home-scene>
-		</canvas>
+    <div class="section fullHeight dark fixed">
+        <canvas #plainPageHeadCanvas class="plainPageHeadCanvas">
+            <app-home-scene [renderer]="plainPageHeadCanvas" (stageUpdated)="homeSceneReady($event)">
+            </app-home-scene>
+        </canvas>
 		<div class="inner">
 			<div class="container">
 				<h1>{{ title }}</h1>

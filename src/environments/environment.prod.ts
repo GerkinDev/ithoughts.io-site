@@ -1,4 +1,9 @@
-const environment: any = {
+// Load config from json in comon with the API server
+import * as crossedEnv from '../../../config.json';
+// Load config valid in all env
+import { environment as genericEnv, IIthoughtsEnvironment }  from './environment.common';
+
+export const environment: IIthoughtsEnvironment = Object.assign({}, crossedEnv, genericEnv, {
 	production: true,
 	app: {
 		port: 4200,
@@ -9,6 +14,4 @@ const environment: any = {
 		port: 3210,
 		url: 'https://api.ithoughts.io'
 	}
-};
-
-export {environment};
+});

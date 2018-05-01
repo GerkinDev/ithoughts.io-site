@@ -1,0 +1,23 @@
+::ng-deep{
+    .tag{
+        background: #000;
+        border-radius: 5px;
+        padding: 0 3px;
+    }
+
+    .clickable{
+        cursor: pointer;
+    }
+}
+
+.currentTags .tag::after{
+    content: 'X';
+    color: red;
+}
+
+::ng-deep{
+    .owl-stage{
+        display: flex;
+        align-items: stretch;
+    }
+}

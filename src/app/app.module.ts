@@ -6,6 +6,7 @@ import 'zone.js/dist/zone.js';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -60,7 +61,8 @@ const recaptchaSettings = { siteKey: _.get(environment, 'app.recaptchaKey') } as
 		HomeSceneComponent,
 	],
 	imports: [
-		BrowserModule,
+        BrowserModule,
+        CommonModule,
 		HttpClientModule,
 		ReactiveFormsModule,
 		TranslateModule.forRoot({

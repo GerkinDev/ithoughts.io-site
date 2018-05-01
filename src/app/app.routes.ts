@@ -9,6 +9,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IndexPageComponent } from './pages/index/index-page.component';
 import { AboutPageComponent } from './pages/about/about-page.component';
 import { ShowroomPageComponent } from './pages/showroom/showroom-page.component';
+import { environment } from '../environments/environment';
 // import { DogListComponent } from './dogs/dog-list.component';
 
 // Route Configuration
@@ -24,4 +25,5 @@ export const routes: Routes = [
 //   provideRouter(routes)
 // ];
 
-export const routing: ModuleWithProviders = RouterModule.forRoot(routes);
+export const routing: ModuleWithProviders = RouterModule.forRoot(routes, 
+    { enableTracing: environment.production });
