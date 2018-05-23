@@ -110,14 +110,26 @@
 		},
 		"index": {
 			"_": ""
+		},
+		"showroom": {
+			"_": ""
 		}
 	},
 	"showroom": {
 		"builtWith": "",
+		"close": "",
 		"head": {
 			"subtitle": "",
 			"title": ""
 		},
-		"seeMore": ""
+		"libs": {
+			"content": "",
+			"title": ""
+		},
+		"seeMore": "",
+		"sites": {
+			"content": "",
+			"title": ""
+		}
 	}
 }

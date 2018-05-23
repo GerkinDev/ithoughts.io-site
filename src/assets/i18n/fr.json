@@ -110,14 +110,26 @@
 		},
 		"index": {
 			"_": "Accueil"
+		},
+		"showroom": {
+			"_": "Projets"
 		}
 	},
 	"showroom": {
 		"builtWith": "Fait avec",
+		"close": "Fermer",
 		"head": {
 			"subtitle": "Quelques projets sur lesquels nous avons travaillé",
 			"title": "Showroom"
 		},
-		"seeMore": "Voir le site"
+		"libs": {
+			"content": "",
+			"title": ""
+		},
+		"seeMore": "Voir le site",
+		"sites": {
+			"content": "",
+			"title": ""
+		}
 	}
 }
