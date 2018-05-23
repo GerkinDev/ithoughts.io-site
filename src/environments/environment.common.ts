@@ -1,10 +1,10 @@
-export interface IShowroomElement{
-	name: string,
-	tags: string[],
-	siteurl?: string,
-	descFr?: string,
-	descEn?: string,
-	image?: string,
+export interface IShowroomElement {
+	name: string;
+	tags: string[];
+	siteurl?: string;
+	descFr?: string;
+	descEn?: string;
+	image?: string;
 }
 
 // The file contents for the current environment will overwrite these during build.
@@ -12,21 +12,21 @@ export interface IShowroomElement{
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-export interface IIthoughtsEnvironment{
-	production: boolean,
+export interface IIthoughtsEnvironment {
+	production: boolean;
 	app: {
 		port: number,
 		url: string,
 		recaptchaKey: string,
-	},
+	};
 	api: {
 		port: number,
 		url: string
-	},
+	};
 	showroom: {
         sites: IShowroomElement[],
         libs: IShowroomElement[],
-    }
+    };
 }
 
 export const environment: {production: boolean, showroom: {
@@ -38,7 +38,7 @@ export const environment: {production: boolean, showroom: {
         sites: [
             {
                 name: 'iThoughts',
-                tags: ['Angular2', 'Pixi.js'],
+                tags: ['Angular2', 'Pixi.js', 'NodeJS'],
                 siteurl: 'https://ithoughts.io',
                 descFr: 'Site corporate responsive avec Angular2 & Diaspora.',
                 descEn: '',
@@ -48,15 +48,18 @@ export const environment: {production: boolean, showroom: {
                 name: 'Self 3D Print',
                 tags: ['Symfony4'],
                 siteurl: 'https://self3dprint.ithoughts.io',
-                descFr: 'Vente en ligne d\'objets imprimés en 3D, où les utilisateurs peuvent imprimer leurs propres modèles. En développement.',
+                descFr: `Vente en ligne d\'objets imprimés en 3D, où les utilisateurs peuvent imprimer leurs propres modèles.<br/>
+En développement.`,
                 descEn: '',
-                //image: '/showroom/self3dprint.png',
+                image: '/assets/images/showroom/self3dprint.png',
             },
             {
                 name: 'GerkinDevelopment',
                 tags: ['Wordpress'],
                 siteurl: 'https://www.gerkindevelopment.net',
-                descFr: 'Blog d\'Alexandre Germain, basé sur un WordPress lourdement personnalisé.',
+                descFr: `Le blog d\'Alexandre Germain (Gerkin), basé sur un WordPress. La plupart de ses projets y sont évoqués, et
+ quelques démos de plugins y sont également présentes. Le glossaire est basé sur
+ <a href="/showroom?name=${encodeURIComponent('iThoughts Tooltip Glossary')}">iThoughts Tooltip Glossary</a>.`,
                 descEn: '',
                 image: '/assets/images/showroom/gerkindevelopment.png',
             },
@@ -67,7 +70,15 @@ export const environment: {production: boolean, showroom: {
                 descFr: 'Vente en ligne de tableaux de fractales ou abstraits.',
                 descEn: '',
                 image: '/assets/images/showroom/artauxmurs.png',
-            }
+            },
+            {
+                name: 'PasseTonCode',
+                tags: ['Symfony4'],
+                siteurl: 'https://passetoncode.ithoughts.io',
+                descFr: 'Site de partage de code pour développeurs perfectionnistes. En développement.',
+                descEn: '',
+                image: '/assets/images/showroom/passetoncode.png',
+            },
         ],
         libs: [
             {
@@ -78,7 +89,7 @@ export const environment: {production: boolean, showroom: {
                 name: 'iThoughts Tooltip Glossary',
                 tags: ['Wordpress'],
                 image: 'https://ps.w.org/ithoughts-tooltip-glossary/assets/icon.svg?rev=1279756',
-                descFr: 'Plugin Wordpress pour gérer des glossaires et des infobulles',
+                descFr: 'Plugin Wordpress pour gérer des glossaires et des infobulles.',
                 siteurl: 'https://wordpress.org/plugins/ithoughts-tooltip-glossary/'
             },
         ],
