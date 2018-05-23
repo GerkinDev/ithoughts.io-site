@@ -1,0 +1,33 @@
+@import '../../scss/vars.scss';
+
+:host{
+    position: relative;
+    //overflow: hidden;
+    padding: 0 15px;
+    display: block;
+}
+.container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0;
+    
+    &:hover{
+        .backdrop{
+            opacity: 1;
+        }
+    }
+}
+
+$backColor: rgba(darken($darkGreen, 50%), 0.8);
+.backdrop{
+    z-index: 1;
+    position: absolute;
+    background-color: $backColor;
+    pointer-events: none;
+    transition: 0.5s all;
+
+    &.fullView{
+        background-color: rgba($backColor, 0.9);
+    }
+}

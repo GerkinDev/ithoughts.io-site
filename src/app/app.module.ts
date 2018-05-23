@@ -41,6 +41,7 @@ import { ShowroomElementComponent } from './pages/showroom/showroom-element/show
 import { HomeSceneComponent } from './home-scene/home-scene.component';
 
 import * as _ from 'lodash';
+import { TilerComponent } from './tiler/tiler.component';
 
 const recaptchaSettings = { siteKey: _.get(environment, 'app.recaptchaKey') } as RecaptchaSettings;
 
@@ -59,6 +60,7 @@ const recaptchaSettings = { siteKey: _.get(environment, 'app.recaptchaKey') } as
 		ShowroomPageComponent,
 		ShowroomElementComponent,
 		HomeSceneComponent,
+		TilerComponent,
 	],
 	imports: [
         BrowserModule,

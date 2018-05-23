@@ -1,3 +1,4 @@
+
 ::ng-deep{
     .tag{
         background: #000;
@@ -13,11 +14,4 @@
 .currentTags .tag::after{
     content: 'X';
     color: red;
-}
-
-::ng-deep{
-    .owl-stage{
-        display: flex;
-        align-items: stretch;
-    }
 }

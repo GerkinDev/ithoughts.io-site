@@ -1,17 +1,27 @@
-<section class="item">
-    <article class="item-body">
-        <img *ngIf="image" class="image" [src]="image"/>
-        <h3>{{ name }}</h3>
-        <div class="description" *ngIf="getDescription()">
-            {{ getDescription() }}
-        </div>
-        <div class="meta">
-            <p *ngIf="tags">{{ 'showroom.builtWith'  | translate }}
-                <a *ngFor="let tag of this.tags" (click)="showroomPage.addSearchTag(tag)" class="tag clickable">{{ tag }}</a>
-            </p>
-        </div>
-    </article>
-    <footer>
-        <a *ngIf="siteurl" [href]="siteurl" class="button">{{ 'showroom.seeMore'  | translate }}</a>
-    </footer>
+<section [ngClass]="{item: true, active: active}" [ngStyle]="{'background-image': 'url(' + image + ')'}">
+	<div
+	#hoverInfos
+	class="hover-shortinfos hover-block"
+	(click)="openFullScreen($event)"
+	(mouseenter)="mouseOnShortInfos($event)"
+	(mouseleave)="mouseOutShortInfos($event)">
+	<h3>{{name}}</h3>
+	</div>
+	<article #fullInfos class="click-block">
+		<div class="inner">
+			<section>
+				<h3>{{ name }}</h3>
+				<div class="description" *ngIf="getDescription()" [innerHTML]="getDescription()"></div>
+				<div class="meta">
+					<p *ngIf="tags">{{ 'showroom.builtWith'  | translate }}
+						<a *ngFor="let tag of this.tags" (click)="filterBy(tag, $event)" class="tag clickable">{{ tag }}</a>
+					</p>
+				</div>
+			</section>
+			<footer>
+				<a *ngIf="siteurl" [href]="siteurl" class="button">{{ 'showroom.seeMore'  | translate }}</a>
+				<a class="close-click-block button" (click)="closeFullScreen($event)">{{ 'showroom.close'  | translate }}</a>
+			</footer>
+		</div>
+	</article>
 </section>

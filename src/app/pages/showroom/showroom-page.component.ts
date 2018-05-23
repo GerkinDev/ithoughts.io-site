@@ -1,15 +1,18 @@
 import { Component, ViewChild, ViewContainerRef, OnInit, AfterContentInit, ComponentFactoryResolver, Injector } from '@angular/core';
 import { ShowroomElementComponent } from './showroom-element/showroom-element.component';
 import * as $ from 'jquery';
-const Diaspora = require( 'diaspora/dist/standalone/diaspora.min' );
+import { Diaspora, Model, Entities } from '@diaspora/diaspora';
+import { InMemoryAdapter } from '@diaspora/diaspora/dist/lib/adapters/inMemory';
 import * as _ from 'lodash';
+import { fromPromise } from 'rxjs/observable/fromPromise';
+import { forkJoin } from 'rxjs/observable/forkJoin';
 
 import { environment} from '../../../environments/environment';
 import { IIthoughtsEnvironment, IShowroomElement } from '../../../environments/environment.common';
 
-import { OwlCarousel } from 'ngx-owl-carousel';
 import { LoDashWrapper, LoDashExplicitArrayWrapper, Dictionary, ValueIteratee } from 'lodash';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { TilerComponent } from '../../tiler/tiler.component';
 
 
 type ObjOrArr<T> = {[key: string]: T} | T[];
@@ -24,15 +27,15 @@ interface ISearch {
 	styleUrls: ['./showroom-page.component.scss']
 })
 export class ShowroomPageComponent {
-	@ViewChild('showroomSites', { read: OwlCarousel }) showroomSites?: OwlCarousel;
-	@ViewChild('showroomLibs', { read: OwlCarousel }) showroomLibs?: OwlCarousel;
-    public currentShowroomSitesElements: Array<IShowroomElement> = [];
-	public allShowroomSitesElements: Array<IShowroomElement> = [];
-	public currentShowroomLibsElements: Array<IShowroomElement> = [];
-	public allShowroomLibsElements: Array<IShowroomElement> = [];
+	public currentShowroomSitesElements: Entities.Set;
+	public currentShowroomLibsElements: Entities.Set;
+
+	@ViewChild('sitesTiler') sitesTiler?: TilerComponent;
+	@ViewChild('libsTiler') libsTiler?: TilerComponent;
+
 	private search: ISearch = {tags: []};
-	private Showroom: any;
-	
+	private Showroom: Model;
+
 	constructor(
 		private activatedRoute: ActivatedRoute,
 		private router: Router
@@ -41,12 +44,23 @@ export class ShowroomPageComponent {
 		this.Showroom = Diaspora.declareModel('Showroom', {
 			sources: 'local',
 			attributes: {
-				name: 'string',
+				name: {
+					type: 'string',
+					required: true,
+				},
 				siteurl: 'string',
 				image: 'string',
 				descFr: 'string',
 				descEn: 'string',
-				techs: {
+				type: {
+					type: 'string',
+					enum: [
+						'Lib',
+						'Site',
+					],
+					required: true,
+				},
+				tags: {
 					type: 'array',
 					of: {
 						enum: [
@@ -59,75 +73,105 @@ export class ShowroomPageComponent {
 				}
 			},
 		});
-		this.activatedRoute.queryParams.subscribe(this.onParamsReady.bind(this));
-	}
-    
-    private filterShowroomElements(showroomElement: IShowroomElement){
-        if(this.search.tags.length === 0){
-            return true;
-        }
-        return _.intersection(showroomElement.tags, this.search.tags).length > 0;
-    }
+		this.currentShowroomLibsElements = new Entities.Set(this.Showroom);
+		this.currentShowroomSitesElements = new Entities.Set(this.Showroom);
 
-    private initShowroom(showroomItems: IShowroomElement[], showroom?: OwlCarousel){
-        const showroomFiltered = _.filter(showroomItems, this.filterShowroomElements.bind(this));
-        console.log({showroomItems, showroomFiltered})
-        if(showroom){
-            showroom.reInit();
-        }
-        return showroomFiltered;
-    }
-
-	private onParamsReady(params: Params){
-		this.search = _.assign({tags: []}, params);
-		
-		this.allShowroomSitesElements = environment.showroom.sites;
-        this.allShowroomLibsElements = environment.showroom.libs;
-        
-		this.currentShowroomSitesElements = this.initShowroom(this.allShowroomSitesElements, this.showroomSites);
-		this.currentShowroomLibsElements = this.initShowroom(this.allShowroomLibsElements, this.showroomLibs);
-	}
-    
-	/**
-	* Deep diff between two object, using lodash
-	* @param  {Object} obj Object compared
-	* @param  {Object} base   Object to compare with
-	* @return {Object}        Return a new object who represent the diff
-	*/
-	private differenceArrays<T,U>(obj: ObjOrArr<T>, base: ObjOrArr<U>) {
-		const reduction = _(obj)
-		.reduce((acc, value, key) => {
-			const duplicate = _.filter(base, otherValue => {
-				const areEqual = _.isEqual(value, otherValue);
-				//console.log({value, otherValue, areEqual})
-				return !areEqual;
+		const assignToAll = <TItems, TNew>(items: TItems[], toMerge: TNew) =>
+		_.map(items,
+			_.unary(_.partialRight(_.assign, toMerge) as <T>(item: T) => T & TNew));
+			const showroomElements = _.flatten([
+				assignToAll(environment.showroom.sites, {type: 'Site'}),
+				assignToAll(environment.showroom.libs, {type: 'Lib'})
+			]);
+			this.Showroom.insertMany(showroomElements).then(() => {
+				this.activatedRoute.queryParams.subscribe(params => this.onParamsReady(params));
 			});
-			//console.log({acc, value, key, duplicate})
-			return _.concat(acc, duplicate);
-		}, [] as (T | U)[]);
-		return reduction;
-	}
-	
-	private reloadCarousel(){
-		//console.log('Trigger reload');
-		if(this.showroomSites){
-			this.showroomSites.reInit();
+		}
+
+		private applySearch(typeFilter: 'Lib' | 'Site', items: any[]) {
+			return this.Showroom.spawnMany(_.chain(items).filter(entity => {
+				if (entity && entity.type === typeFilter) {
+					return this.search.tags.length === 0 || _.intersection(entity.tags, this.search.tags).length > 0;
+				}
+				return false;
+			}).value());
+		}
+
+		private async onParamsReady(params: Params) {
+			console.log('OnParamsReady');
+			if (this.sitesTiler) {
+				this.sitesTiler.leaveFullView();
+			}
+			if (this.libsTiler) {
+				this.libsTiler.leaveFullView();
+			}
+			this.search = _.assign({tags: []}, params);
+			if (typeof this.search.tags === 'string') {
+				this.search.tags = [this.search.tags];
+			}
+
+			const tagsSearch = this.search.tags.length > 0 ? {tags: {$contains: this.search.tags[0]}} : {};
+
+			const items = (this.Showroom.dataSources['local'].adapter as any).store.Showroom.items as any[];
+			this.currentShowroomLibsElements = this.applySearch('Lib', items);
+			this.currentShowroomSitesElements = this.applySearch('Site', items);
+			/*[
+				this.currentShowroomSitesElements,
+				this.currentShowroomLibsElements
+			] = await Promise.all([
+				(this.Showroom.dataSources['local'].adapter as InMemoryAdapter).store.Showroom,
+				this.Showroom.findMany(_.assign({type: 'Lib'}, tagsSearch))
+			]);*/
+
+			setTimeout(() => {
+				if (this.sitesTiler) {
+					this.sitesTiler.bindChildren();
+					this.sitesTiler.reloadCursorPosition();
+				}
+				if (this.libsTiler) {
+					this.libsTiler.bindChildren();
+					this.libsTiler.reloadCursorPosition();
+				}
+			}, 100);
+		}
+
+		/**
+		 * Deep diff between two object, using lodash
+		 * @param  obj Object compared
+		 * @param  base   Object to compare with
+		 * @return Return a new object who represent the diff
+		 */
+		private differenceArrays<T, U>(obj: ObjOrArr<T>, base: ObjOrArr<U>) {
+			const reduction = _(obj)
+			.reduce((acc, value, key) => {
+				const duplicate = _.filter(base, otherValue => {
+					const areEqual = _.isEqual(value, otherValue);
+					// console.log({value, otherValue, areEqual})
+					return !areEqual;
+				});
+				// console.log({acc, value, key, duplicate})
+				return _.concat(acc, duplicate);
+			}, [] as (T | U)[]);
+			return reduction;
+		}
+
+		public addSearchTag(label: string) {
+			console.log('Add search tag', label);
+			this.search.tags.push(label);
+			this.search.tags = _.uniq(this.search.tags);
+			console.log(this.search);
+			this.router.navigate(['showroom'], { queryParams: this.search });
+		}
+
+		public clearSearchTag(label: string) {
+			this.search.tags = _.filter(this.search.tags, label);
+			this.router.navigate(['showroom'], { queryParams: this.search });
+		}
+
+		public clearSearchTags() {
+			this.search.tags = [];
+			this.router.navigate(['showroom'], { queryParams: this.search });
 		}
 	}
-    
-	public addSearchTag(label: string){
-        this.search.tags.push(label);
-		this.search.tags = _.uniq(this.search.tags);
-		this.router.navigate(['showroom'], { queryParams: this.search });
-	}
-	
-	public clearSearchTag(label: string){
-        this.search.tags = _.filter(this.search.tags, label);
-		this.router.navigate(['showroom'], { queryParams: this.search });
-    }
-    
-	public clearSearchTags(){
-        this.search.tags = [];
-		this.router.navigate(['showroom'], { queryParams: this.search });
-	}
-}
+
+

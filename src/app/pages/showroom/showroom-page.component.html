@@ -1,40 +1,34 @@
 <app-plain-page-head title="{{ 'showroom.head.title' | translate}}" subtitle="{{ 'showroom.head.subtitle' | translate}}"></app-plain-page-head>
-<div class="padder">
-    <div class="container">
-            <p *ngIf="search.tags" class="currentTags" >Searching for <a *ngFor="let tag of this.search.tags" (click)="clearSearchTag(tag)" class="tag clickable">{{tag}}</a></p>
-            <h3>{{ 'showroom.sites.title' | translate }}</h3>
-            <p>{{ 'showroom.sites.content' | translate }}</p>
-            <owl-carousel #showroomSites
-            [options]="{items: 3, dots: true, nav: true, center: true, slideBy: 3, startPosition: 1}"
-            [carouselClasses]="['owl-theme', 'row', 'sliding']">
-                <app-showroom-element
-                *ngFor="let item of this.currentShowroomSitesElements"
-                [name]="item.name"
-                [siteurl]="item.siteurl"
-                [image]="item.image"
-                [descFr]="item.descFr"
-                [descEn]="item.descEn"
-                [tags]="item.tags"
-                [showroomPage]="this"
-                ></app-showroom-element>
-            </owl-carousel>
-            <hr/>
-            <h3>{{ 'showroom.libs.title' | translate }}</h3>
-            <p>{{ 'showroom.libs.content' | translate }}</p>
-            <owl-carousel #showroomLibs
-            [options]="{items: 3, dots: true, nav: true, center: true, slideBy: 3, startPosition: 1}"
-            [carouselClasses]="['owl-theme', 'row', 'sliding']">
-                <app-showroom-element
-                *ngFor="let item of this.currentShowroomLibsElements"
-                [name]="item.name"
-                [siteurl]="item.siteurl"
-                [image]="item.image"
-                [descFr]="item.descFr"
-                [descEn]="item.descEn"
-                [tags]="item.tags"
-                [showroomPage]="this"
-                ></app-showroom-element>
-            </owl-carousel>
-            <hr/>
-    </div>
+<div class="padder" (filterChange)="console.log($event)">
+	<div class="container">
+		<p *ngIf="search.tags" class="currentTags" >Searching for <a *ngFor="let tag of this.search.tags" (click)="clearSearchTag(tag)" class="tag clickable">{{tag}}</a></p>
+		<h3>{{ 'showroom.sites.title' | translate }}</h3>
+		<p>{{ 'showroom.sites.content' | translate }}</p>
+		<app-tiler #sitesTiler>
+			<app-showroom-element
+			*ngFor="let item of this.currentShowroomSitesElements.entities"
+			[name]="item.attributes.name"
+			[siteurl]="item.attributes.siteurl"
+			[image]="item.attributes.image"
+			[descFr]="item.attributes.descFr"
+			[descEn]="item.attributes.descEn"
+			[tags]="item.attributes.tags"
+			></app-showroom-element>
+		</app-tiler>
+		<hr/>
+		<h3>{{ 'showroom.libs.title' | translate }}</h3>
+		<p>{{ 'showroom.libs.content' | translate }}</p>
+		<app-tiler #libsTiler>
+			<app-showroom-element
+			*ngFor="let item of this.currentShowroomLibsElements.entities"
+			[name]="item.attributes.name"
+			[siteurl]="item.attributes.siteurl"
+			[image]="item.attributes.image"
+			[descFr]="item.attributes.descFr"
+			[descEn]="item.attributes.descEn"
+			[tags]="item.attributes.tags"
+			></app-showroom-element>
+		</app-tiler>
+		<hr/>
+	</div>
 </div>
