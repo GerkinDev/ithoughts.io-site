@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-const Diaspora = require( 'diaspora/dist/standalone/diaspora.min' );
+import { Diaspora } from '@diaspora/diaspora';
 
 import { environment} from '../../environments/environment';
 import { IIthoughtsEnvironment } from '../../environments/environment.common';
