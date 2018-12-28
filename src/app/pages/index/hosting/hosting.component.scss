@@ -1,5 +1,12 @@
 @import '../../../../scss/vars';
 
+:host{
+  padding-top: 10px;
+  @media(min-width: 440px){
+    margin-top: -75px;
+    padding-top: 0;
+  }
+}
 #paneSplit{
 	display: flex;
 	flex-direction: row;

@@ -1,9 +1,18 @@
 import { Component, AfterContentInit, ElementRef, ViewChild, HostListener, ViewChildren, QueryList, OnChanges, Input } from '@angular/core';
+import {Observable} from 'rxjs/Observable';
 
 import * as _ from 'lodash';
 
 
 const DELAY_BEFORE_TRANSITION = 10;
+
+enum TilerState {
+	Inactive,
+	Hover,
+	OpeningFullview,
+	Fullview,
+	ClosingFullview,
+}
 
 @Component({
 	selector: 'app-tiler',
@@ -16,6 +25,17 @@ export class TilerComponent implements AfterContentInit, OnChanges {
 	private currentTarget?: HTMLElement;
 	private fullView = false;
 	private willClose = false;
+	private fadeOut: NodeJS.Timer | null = null;
+	private isClosing = false;
+
+	private state: Observable<TilerState>;
+
+	private sizeBackup = {
+		left: 0,
+		top: 0,
+		width: 0,
+		height: 0
+	};
 
 	private cursorStyle = {
 		opacity: 0,
@@ -28,14 +48,16 @@ export class TilerComponent implements AfterContentInit, OnChanges {
 	};
 
 	constructor(private el: ElementRef) {
-
+		this.state = Observable.of(TilerState.Inactive);
 	}
 
 	ngAfterContentInit() {
 		this.bindChildren();
 		const elements = (this.el.nativeElement as HTMLElement).querySelectorAll('.container > *') as any as HTMLElement[];
 		this.currentTarget = elements[0];
-		this.reloadCursorPosition();
+		setTimeout(() => {
+			this.reloadCursorPosition();
+		}, 10);
 	}
 
 	public bindChildren() {
@@ -62,26 +84,12 @@ export class TilerComponent implements AfterContentInit, OnChanges {
 		});*/
 	}
 
-	private addTargetContentClass(selector: string, newClass: string) {
-		if (this.currentTarget) {
-			const hoverBlock = this.currentTarget.querySelector(selector);
-			if (hoverBlock) {
-				hoverBlock.classList.add(newClass);
-			}
-		}
-	}
-
-	private removeTargetContentClass(selector: string, oldClass: string) {
-		if (this.currentTarget) {
-			const hoverBlock = this.currentTarget.querySelector(selector);
-			if (hoverBlock) {
-				hoverBlock.classList.remove(oldClass);
-			}
-		}
-	}
-
 	@HostListener('cursor-move', ['$event'])
 	private moveCursor(event: CustomEvent) {
+		if (this.fadeOut) {
+			clearTimeout(this.fadeOut);
+			this.fadeOut = null;
+		}
 		if (!this.fullView) {
 			this.currentTarget = event.detail.newTarget;
 			this.reloadCursorPosition(1);
@@ -90,7 +98,10 @@ export class TilerComponent implements AfterContentInit, OnChanges {
 
 	@HostListener('cursor-maybe-leave')
 	private hideCursorCooldown(timeout: number = 10) {
-console.log('Will hide in', timeout);
+		this.fadeOut = setTimeout(() => {
+			this.onMouseLeave();
+			this.fadeOut = null;
+		}, timeout);
 	}
 
 	@HostListener('open-full-view')
@@ -100,7 +111,6 @@ console.log('Will hide in', timeout);
 		}
 		this.willClose = false;
 		this.fullView = true;
-		console.log('Go full view', this.currentTarget);
 		this.currentTarget.classList.add('active');
 		if (this.cursor && this.cursor.nativeElement) {
 			this.cursor.nativeElement.classList.add('fullView');
@@ -113,19 +123,17 @@ console.log('Will hide in', timeout);
 			});
 			setTimeout(() => {
 				this.cursorStyle.transition = `${this.transitionTimeInMs}ms all`;
-				this.reloadCursorPosition();
-				setTimeout(() => this.addTargetContentClass('.click-block', 'visible'), this.transitionTimeInMs);
+				this.reloadCursorPosition(1);
 			}, DELAY_BEFORE_TRANSITION);
 		}
 	}
 
 	@HostListener('close-full-view')
 	public leaveFullView() {
-		console.log('leaveFullView, willClose?', this.willClose);
 		this.fullView = false;
-		this.removeTargetContentClass('.click-block', 'visible');
-		if (this.cursor && this.cursor.nativeElement) {
+		if (this.cursorStyle.opacity === 1 && this.cursor && this.cursor.nativeElement) {
 			console.log('Do leave');
+			this.cursorStyle.opacity = 1;
 			this.cursor.nativeElement.classList.remove('fullView');
 			const containerPos = (this.el.nativeElement as HTMLElement).getBoundingClientRect();
 			const headerHeight = $('#mainHeader').height() as number;
@@ -137,43 +145,47 @@ console.log('Will hide in', timeout);
 			};
 			_.assign(this.cursorStyle, newStyle);
 			console.log(this.cursorStyle);
+			this.isClosing = true;
 			setTimeout(() => {
 				this.cursorStyle.transition = `${this.transitionTimeInMs}ms all`;
-				this.cursorStyle.opacity = 0;
+				// this.cursorStyle.opacity = 0;
 				setTimeout(() => {
+					this.isClosing = false;
 					this.reloadCursorPosition();
 					if (this.willClose === true) {
 						console.log('Closing after timeout');
 						this.onMouseLeave();
 					}
-					if (this.cursorStyle.opacity === 1) {
-						this.addTargetContentClass('.hover-block', 'visible');
-					}
-				}, this.transitionTimeInMs);
+				}, 500);
 			}, DELAY_BEFORE_TRANSITION);
 		}
 	}
 
 	public reloadCursorPosition(opacity = this.cursorStyle.opacity) {
-		// console.log('reloadCursorPosition');
 		const style = {
 			opacity,
 		};
-		if (this.fullView) {
-			const headerHeight = $('#mainHeader').height() as number;
-			_.assign(style, {
-				left: 0 + 'px',
-				top: headerHeight + 'px',
-				width: window.innerWidth + 'px',
-				height: window.innerHeight - headerHeight + 'px',
-			});
-		} else if (this.currentTarget) {
-			_.assign(style, {
-				left: this.currentTarget.offsetLeft + 'px',
-				top: this.currentTarget.offsetTop + 'px',
-				width: this.currentTarget.offsetWidth + 'px',
-				height: this.currentTarget.offsetHeight + 'px',
-			});
+		if (!this.isClosing) {
+			if (this.fullView) {
+				const headerHeight = $('#mainHeader').height() as number;
+				_.assign(style, {
+					left: 0 + 'px',
+					top: headerHeight + 'px',
+					width: window.innerWidth + 'px',
+					height: window.innerHeight - headerHeight + 'px',
+				});
+			} else if (this.currentTarget) {
+				this.sizeBackup.left = this.currentTarget.offsetLeft;
+				this.sizeBackup.top = this.currentTarget.offsetTop;
+				this.sizeBackup.width = this.currentTarget.offsetWidth || this.sizeBackup.width;
+				this.sizeBackup.height = this.currentTarget.offsetHeight || this.sizeBackup.height;
+				_.assign(style, {
+					left: this.sizeBackup.left + 'px',
+					top: this.sizeBackup.top + 'px',
+					width: this.sizeBackup.width + 'px',
+					height: this.sizeBackup.height + 'px',
+				});
+			}
 		}
 		_.assign(this.cursorStyle, style);
 	}
@@ -205,9 +217,8 @@ console.log('Will hide in', timeout);
 	@HostListener('mouseleave')
 	onMouseLeave() {
 		this.willClose = true;
-		if (!this.fullView) {
+		if (!this.fullView && !this.isClosing) {
 			this.cursorStyle.opacity = 0;
-			this.removeTargetContentClass('.hover-block', 'visible');
 		}
 	}
 }

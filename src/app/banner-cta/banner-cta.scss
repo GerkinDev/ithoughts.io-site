@@ -2,7 +2,7 @@
 
 section{
 	padding: 50px 20px 70px;
-	
+
 	article{
 		max-height: 0;
 		overflow: hidden;
@@ -25,4 +25,11 @@ section{
 			max-height: 500px;
 		}
 	}
+}
+
+.button{
+  @media(max-width: 440px){
+    text-align: center;
+    display: block;
+  }
 }

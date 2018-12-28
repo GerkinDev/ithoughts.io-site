@@ -1,4 +1,3 @@
-<div class="padder">
 	<div class="container">
 		<h2>{{ 'hosting.title' | translate }}</h2>
 		<article>
@@ -8,29 +7,28 @@
 				<section [innerHTML]="'hosting.features' | translate"></section>
 				<aside>
 					<owl-carousel #owlElement
-						[options]="{
-							items: 1,
-							dots: true,
-							nav: true,
-							loop: false,
-							center: true
-						}"
-						[carouselClasses]="['owl-theme']">
-						<div class="item">
-							<img src="/assets/images/services/ovh.jpg" [alt]=" 'hosting.feat.ovh.alt' | translate">
-							<div class="content"><h4>{{ 'hosting.feat.ovh.title' | translate }}</h4></div>
-						</div>
-						<div class="item">
-							<img src="/assets/images/services/docker.png" [alt]=" 'hosting.feat.docker.alt' | translate">
-							<div class="content"><h4>{{ 'hosting.feat.docker.title' | translate }}</h4></div>
-						</div>
-						<div class="item">
-							<img src="/assets/images/services/rainloop.png" [alt]=" 'hosting.feat.rainloop.alt' | translate">
-							<div class="content"><h4>{{ 'hosting.feat.rainloop.title' | translate }}</h4></div>
-						</div>
-					</owl-carousel>
-				</aside>
-			</div>
-		</article>
-	</div>
+					[options]="{
+						items: 1,
+						dots: true,
+						nav: true,
+						loop: false,
+						center: true
+					}"
+					[carouselClasses]="['owl-theme']">
+					<div class="item">
+						<img src="/assets/images/services/ovh.jpg" [alt]=" 'hosting.feat.ovh.alt' | translate">
+						<div class="content"><h4>{{ 'hosting.feat.ovh.title' | translate }}</h4></div>
+					</div>
+					<div class="item">
+						<img src="/assets/images/services/docker.png" [alt]=" 'hosting.feat.docker.alt' | translate">
+						<div class="content"><h4>{{ 'hosting.feat.docker.title' | translate }}</h4></div>
+					</div>
+					<div class="item">
+						<img src="/assets/images/services/rainloop.png" [alt]=" 'hosting.feat.rainloop.alt' | translate">
+						<div class="content"><h4>{{ 'hosting.feat.rainloop.title' | translate }}</h4></div>
+					</div>
+				</owl-carousel>
+			</aside>
+		</div>
+	</article>
 </div>

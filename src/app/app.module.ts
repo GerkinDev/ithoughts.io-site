@@ -10,8 +10,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-export function createTranslateLoader(http: HttpClient) {
-	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+export function createTranslateLoader( http: HttpClient ) {
+	return new TranslateHttpLoader( http, './assets/i18n/', '.json');
 }
 
 import { AppComponent } from './app.component';
@@ -21,7 +21,7 @@ import { PlainPageHeadComponent } from './plain-page-head/plain-page-head';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {GoogleAnalyticsEventsService} from './google-analytics-events.service';
-import {MailService} from './services/mail.service';
+import {MailService} from './services/mail/mail.service';
 
 import { OwlModule } from 'ngx-owl-carousel';
 import { PixiModule } from 'angular2pixi';
@@ -63,18 +63,18 @@ const recaptchaSettings = { siteKey: _.get(environment, 'app.recaptchaKey') } as
 		TilerComponent,
 	],
 	imports: [
-        BrowserModule,
+		BrowserModule,
         CommonModule,
-		HttpClientModule,
-		ReactiveFormsModule,
-		TranslateModule.forRoot({
+		      HttpClientModule,
+		      ReactiveFormsModule,
+		      TranslateModule.forRoot({
 			loader: {
 				provide: TranslateLoader,
 				useFactory: createTranslateLoader,
 				deps: [HttpClient]
 			}
 		}),
-		routing,
+		      routing,
 		OwlModule,
 		PixiModule,
 		RecaptchaModule.forRoot(), // Keep in mind the "forRoot"-magic nuances!
@@ -96,7 +96,7 @@ const recaptchaSettings = { siteKey: _.get(environment, 'app.recaptchaKey') } as
 	],
 	bootstrap: [
 		AppComponent,
-	]
-})
+	],
+} )
 export class AppModule {}
 

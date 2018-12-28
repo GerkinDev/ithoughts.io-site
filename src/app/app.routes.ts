@@ -16,7 +16,7 @@ import { environment } from '../environments/environment';
 export const routes: Routes = [
 	{ path: '', component: IndexPageComponent },
 	{ path: 'about', component: AboutPageComponent },
-	{ path: 'showroom', component: ShowroomPageComponent },
+	{ path: 'showroom', component: ShowroomPageComponent, runGuardsAndResolvers: 'always' },
 	// { path: '', component: IndexPageComponent },
 ];
 
@@ -25,5 +25,5 @@ export const routes: Routes = [
 //   provideRouter(routes)
 // ];
 
-export const routing: ModuleWithProviders = RouterModule.forRoot(routes, 
+export const routing: ModuleWithProviders = RouterModule.forRoot(routes,
     { enableTracing: environment.production });

@@ -1,27 +1,43 @@
 @import '../../../../scss/vars';
 
 :host{
-	position: relative;
+  position: relative;
+  padding-bottom: 0;
 }
 .padder{
 	padding-bottom: 0;
 }
 
 .images {
-	display: -ms-flexbox;
 	display: flex;
-	-ms-flex-direction: row;
-	flex-direction: row;
-	-ms-flex-pack: distribute;
+	flex-direction: column;
+	align-items: stretch;
 	justify-content: space-around;
+
+	@media(min-width: 440px){
+		flex-direction: row;
+	}
 }
 .image {
-	width: 90px;
-	height: 90px;
-	-ms-flex: 0 0 90px;
-	flex: 0 0 90px;
-	line-height: 90px;
 	position: relative;
+	text-align: center;
+	@media(min-width: 340px) {
+		&:nth-child(even) {
+			text-align: right;
+		}
+		&:nth-child(odd) {
+			text-align: left;
+		}
+		&:not(:last-child){
+			margin-bottom: -45px;
+		}
+	}
+
+	@media(min-width: 440px){
+		height: 90px;
+		flex: 0 0 90px;
+		line-height: 90px;
+	}
 
 	&::after{
 		content: attr(data-text);
@@ -45,8 +61,13 @@
 		top:50%;
 	}
 	img {
-		max-width: 90px;
-		max-height: 90px;
+		width: 100%;
+		max-width: 110px;
+
+		@media(min-width: 440px){
+			max-width: 90px;
+			max-height: 90px;
+		}
 	}
 }
 .twoPaneContainer{
@@ -61,13 +82,15 @@ h3, h4{
 }
 .oneSide {
 	flex: 1 1 50%;
-	padding: 0 25px 60px;
 	box-sizing: border-box;
 	position: relative;
 	/*box-shadow: 0 0 5px 0 $dark;
 	margin: 5px;*/
 	background-color: rgba($green, 0.0);
 	transition: 0.5s all;
+	@media(min-width: 440px){
+		padding: 0 25px 60px;
+	}
 
 	.ctaArea {
 		position: absolute;

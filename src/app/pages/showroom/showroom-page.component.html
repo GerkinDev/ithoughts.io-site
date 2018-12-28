@@ -1,7 +1,7 @@
 <app-plain-page-head title="{{ 'showroom.head.title' | translate}}" subtitle="{{ 'showroom.head.subtitle' | translate}}"></app-plain-page-head>
 <div class="padder" (filterChange)="console.log($event)">
 	<div class="container">
-		<p *ngIf="search.tags" class="currentTags" >Searching for <a *ngFor="let tag of this.search.tags" (click)="clearSearchTag(tag)" class="tag clickable">{{tag}}</a></p>
+		<p *ngIf="search.tags && search.tags.length > 0" class="currentTags" >Searching for <a *ngFor="let tag of this.search.tags" (click)="clearSearchTag(tag)" class="tag clickable">{{tag}}</a></p>
 		<h3>{{ 'showroom.sites.title' | translate }}</h3>
 		<p>{{ 'showroom.sites.content' | translate }}</p>
 		<app-tiler #sitesTiler>

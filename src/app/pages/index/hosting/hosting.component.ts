@@ -6,7 +6,8 @@ import { OwlCarousel } from 'ngx-owl-carousel';
 @Component({
 	selector: 'app-web-hosting',
 	templateUrl: './hosting.component.html',
-	styleUrls: ['./hosting.component.scss']
+	styleUrls: ['./hosting.component.scss'],
+	host: { 'class': 'padder' }
 })
 export class HostingComponent implements AfterContentInit, OnInit {
 	@ViewChild('owlElement') owlElement?: OwlCarousel;

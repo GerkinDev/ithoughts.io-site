@@ -13,6 +13,7 @@ import {TranslateService} from '@ngx-translate/core';
 export class AppComponent extends AppTranslatableComponent {
 	title = 'iThoughts';
 	today = new Date();
+	private menuOpen = false;
 
 	constructor(public router: Router, public googleAnalyticsEventsService: GoogleAnalyticsEventsService, translate: TranslateService) {
 		super(translate);
@@ -20,6 +21,7 @@ export class AppComponent extends AppTranslatableComponent {
 			if (event instanceof NavigationEnd) {
 				ga('set', 'page', event.urlAfterRedirects);
 				ga('send', 'pageview');
+				this.menuOpen = false;
 			}
 		});
 	}

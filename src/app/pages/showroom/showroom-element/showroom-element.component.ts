@@ -32,8 +32,9 @@ export class ShowroomElementComponent {
 	}
 
 	filterBy(tag: string) {
+		console.log('Filterby', tag);
 		this.el.nativeElement
-		.dispatchEvent(new CustomEvent('filter-change', {
+		.dispatchEvent(new CustomEvent('filter-add', {
 			detail: tag,
 			bubbles: true
 		}));
@@ -41,7 +42,6 @@ export class ShowroomElementComponent {
 
 	closeFullScreen(event: Event) {
 		this.inFullScreen = false;
-		console.log('Closing fs', this.fullInfos, event)
 		if (this.fullInfos) {
 			(this.fullInfos.nativeElement as HTMLElement).classList.remove('active');
 		}
@@ -51,7 +51,7 @@ export class ShowroomElementComponent {
 		}));
 		event.stopImmediatePropagation();
 	}
-	
+
 	@HostListener('mouseenter')
 	mouseOnShortInfos() {
 		if (!this.inFullScreen && this.hoverInfos) {
@@ -78,24 +78,27 @@ export class ShowroomElementComponent {
 		}));
 	}
 
-	@HostListener('click')
-	openFullView() {
-		console.log('Hey there! Opening me in full view:', this);
-		this.inFullScreen = true;
-		if (this.hoverInfos) {
-			(this.hoverInfos.nativeElement as HTMLElement).classList.remove('active');
-		}
-		setTimeout(() => {
-			if (this.fullInfos) {
-				(this.fullInfos.nativeElement as HTMLElement).classList.add('active');
+	@HostListener('click', ['$event'])
+	openFullView(event: MouseEvent) {
+		console.log(event);
+		if (!this.inFullScreen) {
+			this.inFullScreen = true;
+			if (this.hoverInfos) {
+				(this.hoverInfos.nativeElement as HTMLElement).classList.remove('active');
 			}
-		}, 500);
-		this.el.nativeElement
-		.dispatchEvent(new CustomEvent('open-full-view', {
-			detail: {
-				target: this,
-			},
-			bubbles: true
-		}));
+			setTimeout(() => {
+				if (this.fullInfos) {
+					(this.fullInfos.nativeElement as HTMLElement).classList.add('active');
+				}
+			}, 500);
+			this.el.nativeElement
+			.dispatchEvent(new CustomEvent('open-full-view', {
+				detail: {
+					target: this,
+				},
+				bubbles: true
+			}));
+			event.stopImmediatePropagation();
+		}
 	}
 }

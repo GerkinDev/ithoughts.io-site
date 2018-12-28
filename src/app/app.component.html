@@ -1,11 +1,16 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<header id="mainHeader">
+<header id="mainHeader"  [class.opened]="menuOpen">
+	<button (click)="menuOpen = !menuOpen">
+		<div class="bar1"></div>
+		<div class="bar2"></div>
+		<div class="bar3"></div>
+	</button>
 	<a id="siteTitle" [routerLink]="['/']">{{ title }}</a>
 	<nav>
 		<ul>
-			<li><a [routerLink]="['/']">{{ 'menu.index._' | translate }}</a></li>
-			<li><a [routerLink]="['/about']">{{ 'menu.about._' | translate }}</a></li>
-			<li><a [routerLink]="['/showroom']">{{ 'menu.showroom._' | translate }}</a></li>
+			<li><a [routerLink]="['/']"><span>{{ 'menu.index._' | translate }}</span></a></li>
+			<li><a [routerLink]="['/showroom']"><span>{{ 'menu.showroom._' | translate }}</span></a></li>
+			<li><a [routerLink]="['/about']"><span>{{ 'menu.about._' | translate }}</span></a></li>
 		</ul>
 	</nav>
 	<div id="langSwitcher">
@@ -13,4 +18,6 @@
 	</div>
 </header>
 <router-outlet></router-outlet>
-<footer class="dark">Copyright <time [dateTime]="today.toISOString()">{{ today | date: 'yyyy' }}</time> – <a [routerLink]="['/']">iThoughts.io</a> – {{ 'footer.rights' | translate }}</footer>
+<footer class="dark">
+	<div><time [dateTime]="today.toISOString()">{{ today | date: 'yyyy' }}</time><i class="footer-sep"></i><a [routerLink]="['/']">iThoughts.io</a><i class="footer-sep"></i>{{ 'footer.rights' | translate }}</div>
+</footer>
